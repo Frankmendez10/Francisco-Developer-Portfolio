@@ -1,0 +1,30 @@
+import speech_recognition as sr
+import pyttsx3
+from translate import Translator
+
+class VoiceTranslator:
+    def __init__(self):
+        self.recognizer = sr.Recognizer()
+        self.engine = pyttsx3.init()
+        self.translator = Translator(from_lang="spanish", to_lang="english")
+
+    def run(self):
+        with sr.Microphone() as source:
+            print("Speak...")
+            audio = self.recognizer.listen(source)
+
+            try:
+                text = self.recognizer.recognize_google(audio, language='es-ES')
+                print(text)
+
+                translated = self.translator.translate(text)
+                print(translated)
+
+                self.engine.say(translated)
+                self.engine.runAndWait()
+
+            except Exception as e:
+                print("Error:", e)
+
+if __name__ == "__main__":
+    VoiceTranslator().run()
